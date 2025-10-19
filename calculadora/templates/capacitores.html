@@ -1,26 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>⚡ Capacitores y Capacitancias</h2>
-  <p><strong>C = Q / V</strong></p>
+<style>
+body{background:linear-gradient(90deg,#0e1a26,#002040);font-family:"Segoe UI",sans-serif;overflow-x:hidden;}
+.form-container{display:flex;justify-content:center;align-items:flex-start;width:100%;padding:6vh 3vw 12vh;}
+.form-box{background:linear-gradient(145deg,#003366,#001a33);color:white;width:95%;max-width:550px;border-radius:15px;border:6px double #66ccff;box-shadow:0 3px 12px rgba(0,0,0,0.6);padding:25px;text-align:center;}
+.form-box h2{font-family:"Times New Roman";font-size:28px;font-weight:bold;}
+.form-box h3{font-size:18px;color:#cce6ff;}
+.btn-info-custom{border:2px solid #66ccff;background:white;color:#003366;border-radius:10px;padding:8px 15px;transition:0.3s;margin-bottom:10px;}
+.btn-info-custom:hover{background:#66ccff;color:black;}
+.inner-box{background:#e6f5ff;border-radius:12px;padding:20px;margin-top:10px;}
+.input-group{background:#cce6ff;display:flex;align-items:center;justify-content:center;border:2px solid #003366;border-radius:8px;padding:6px;margin:8px auto;}
+.input-group span{font-size:22px;margin-right:8px;color:#003366;}
+.input-group input{border:2px solid #003366;width:80%;text-align:center;border-radius:5px;padding:5px;color:#003366;}
+.btn-calc{border:2px solid #66ccff;background:linear-gradient(90deg,#66ccff,#0099ff);color:white;width:85%;border-radius:10px;padding:8px;font-weight:bold;}
+.btn-calc:hover{transform:scale(1.05);}
+#resultado{display:none;background:#001a33;color:white;border:2px solid #66ccff;border-radius:10px;margin-top:20px;padding:10px 15px;font-weight:bold;}
+.overlay{position:fixed;top:0;left:0;width:100dvw;height:100dvh;background:rgba(0,40,80,0.8);display:none;justify-content:center;align-items:center;z-index:999;}
+.definition-box{background:#e6f5ff;color:#001a33;border-radius:12px;padding:25px;width:clamp(280px,90%,450px);border:4px double #66ccff;position:relative;}
+.close-btn{position:absolute;top:10px;right:15px;font-size:22px;font-weight:bold;color:#001a33;background:none;border:none;cursor:pointer;}
+.close-btn:hover{color:#0099ff;}
+</style>
 
-  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
-    <form id="formCapacitor">
-      <input type="number" step="any" class="form-control mb-3" placeholder="Carga Q (C)" id="Q" required>
-      <input type="number" step="any" class="form-control mb-3" placeholder="Voltaje V (V)" id="V" required>
-      <button type="submit" class="btn btn-success w-100">Calcular</button>
-    </form>
-    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+<div class="form-container">
+  <div class="form-box">
+    <h2>⚡ Capacitores y Capacitancia</h2>
+    <h3>C = Q / V</h3>
+
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <form id="formCapacitor">
+        <div class="input-group"><span>🔋</span><input type="number" id="input_Q" step="any" placeholder="Carga Q (C)" required></div>
+        <div class="input-group"><span>⚡</span><input type="number" id="input_V" step="any" placeholder="Voltaje V (V)" required></div>
+        <button type="submit" class="btn btn-calc">🧮 Calcular</button>
+      </form>
+    </div>
+    <div id="resultado"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de Capacitancia</h4>
+    <p>La <strong>capacitancia</strong> (C) mide la capacidad de un condensador para almacenar carga eléctrica (Q) por unidad de voltaje (V).</p>
+    <ul>
+      <li><strong>C</strong> = Capacitancia (Faradios, F)</li>
+      <li><strong>Q</strong> = Carga eléctrica almacenada (Coulombs, C)</li>
+      <li><strong>V</strong> = Diferencia de potencial (Voltios, V)</li>
+    </ul>
   </div>
 </div>
 
 <script>
-document.getElementById("formCapacitor").addEventListener("submit", e => {
+document.getElementById("formCapacitor").addEventListener("submit",e=>{
   e.preventDefault();
-  const Q = parseFloat(Q.value), V = parseFloat(V.value);
-  if (isNaN(Q) || isNaN(V) || V === 0) return resultado.textContent = "⚠️ Valores inválidos.";
-  const C = Q / V;
-  resultado.textContent = `Capacitancia = ${C.toExponential(3)} F`;
+  const Q=parseFloat(document.getElementById("input_Q").value);
+  const V=parseFloat(document.getElementById("input_V").value);
+  const resultado=document.getElementById("resultado");
+
+  if(isNaN(Q)||isNaN(V)||V===0){
+    resultado.textContent="⚠️ Ingresa valores válidos (V ≠ 0)";
+    resultado.style.display="block";
+    return;
+  }
+
+  const C=Q/V;
+  resultado.textContent=`Capacitancia = ${C.toExponential(3)} F`;
+  resultado.style.display="block";
 });
+
+const overlay=document.getElementById("overlay");
+document.getElementById("btnInfo").onclick=()=>overlay.style.display="flex";
+document.getElementById("closeOverlay").onclick=()=>overlay.style.display="none";
+overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
 </script>
 {% endblock %}

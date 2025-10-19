@@ -1,26 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>🌀 Ley de Gauss</h2>
-  <p><strong>Φ = Q / ε₀</strong></p>
+<style>
+body{background:linear-gradient(90deg,#1a0f00,#332600);font-family:"Segoe UI",sans-serif;overflow-x:hidden;}
+.form-container{display:flex;justify-content:center;align-items:flex-start;width:100%;padding:6vh 3vw 12vh;}
+.form-box{background:linear-gradient(145deg,#806600,#4d3b00);color:white;width:95%;max-width:550px;border-radius:15px;border:6px double #ffcc33;box-shadow:0 3px 12px rgba(0,0,0,0.6);padding:25px;text-align:center;}
+.form-box h2{font-family:"Times New Roman";font-size:28px;font-weight:bold;}
+.form-box h3{font-size:18px;color:#ffdd66;}
+.btn-info-custom{border:2px solid #ffcc33;background:white;color:#4d3b00;border-radius:10px;padding:8px 15px;transition:0.3s;margin-bottom:10px;}
+.btn-info-custom:hover{background:#ffcc33;color:black;}
+.inner-box{background:#fff8e6;border-radius:12px;padding:20px;margin-top:10px;}
+.input-group{background:#ffeecc;display:flex;align-items:center;justify-content:center;border:2px solid #4d3b00;border-radius:8px;padding:6px;margin:8px auto;}
+.input-group span{font-size:22px;margin-right:8px;color:#4d3b00;}
+.input-group input{border:2px solid #4d3b00;width:80%;text-align:center;border-radius:5px;padding:5px;color:#4d3b00;}
+.btn-calc{border:2px solid #ffcc33;background:linear-gradient(90deg,#ffcc33,#ff9900);color:white;width:85%;border-radius:10px;padding:8px;font-weight:bold;}
+.btn-calc:hover{transform:scale(1.05);}
+#resultado{display:none;background:#332600;color:white;border:2px solid #ffcc33;border-radius:10px;margin-top:20px;padding:10px 15px;font-weight:bold;}
+.overlay{position:fixed;top:0;left:0;width:100dvw;height:100dvh;background:rgba(40,30,0,0.8);display:none;justify-content:center;align-items:center;z-index:999;}
+.definition-box{background:#fff8e6;color:#4d3b00;border-radius:12px;padding:25px;width:clamp(280px,90%,450px);border:4px double #ffcc33;position:relative;}
+.close-btn{position:absolute;top:10px;right:15px;font-size:22px;font-weight:bold;color:#4d3b00;background:none;border:none;cursor:pointer;}
+.close-btn:hover{color:#ffcc33;}
+</style>
 
-  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
-    <form id="formGauss">
-      <input type="number" step="any" class="form-control mb-3" placeholder="Carga Q (C)" id="Q" required>
-      <input type="number" step="any" class="form-control mb-3" placeholder="Constante dieléctrica ε₀ (8.85e-12)" id="e0" value="8.85e-12" required>
-      <button type="submit" class="btn btn-success w-100">Calcular</button>
-    </form>
-    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+<div class="form-container">
+  <div class="form-box">
+    <h2>🌀 Ley de Gauss</h2>
+    <h3>Φ = Q / ε₀</h3>
+
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <form id="formGauss">
+        <div class="input-group"><span>🔋</span><input type="number" id="input_Q" placeholder="Carga Q (C)" required></div>
+        <div class="input-group"><span>⚙️</span><input type="number" id="input_e0" value="8.85e-12" placeholder="Constante ε₀" required></div>
+        <button type="submit" class="btn btn-calc">🧮 Calcular</button>
+      </form>
+    </div>
+    <div id="resultado"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de la Ley de Gauss</h4>
+    <p>Relaciona el flujo eléctrico total (Φ) a través de una superficie cerrada con la carga (Q) encerrada en su interior.</p>
+    <ul>
+      <li><strong>Φ</strong> = Flujo eléctrico (N·m²/C)</li>
+      <li><strong>Q</strong> = Carga eléctrica encerrada (Coulombs, C)</li>
+      <li><strong>ε₀</strong> = Permisividad del vacío (8.85 × 10⁻¹² C²/N·m²)</li>
+    </ul>
   </div>
 </div>
 
 <script>
-document.getElementById("formGauss").addEventListener("submit", e => {
+document.getElementById("formGauss").addEventListener("submit", e=>{
   e.preventDefault();
-  const Q = parseFloat(Q.value), e0 = parseFloat(e0.value);
-  if (isNaN(Q) || isNaN(e0) || e0 === 0) return resultado.textContent = "⚠️ Ingresa valores válidos.";
-  const phi = Q / e0;
-  resultado.textContent = `Flujo eléctrico Φ = ${phi.toLocaleString('es-CO', {maximumFractionDigits: 3})} N·m²/C`;
+  const Q=parseFloat(document.getElementById("input_Q").value);
+  const e0=parseFloat(document.getElementById("input_e0").value);
+  const resultado=document.getElementById("resultado");
+
+  if(isNaN(Q)||isNaN(e0)||e0===0){
+    resultado.textContent="⚠️ Ingresa valores válidos (ε₀ ≠ 0)";
+    resultado.style.display="block";
+    return;
+  }
+
+  const phi=Q/e0;
+  resultado.textContent=`Flujo eléctrico Φ = ${phi.toExponential(3)} N·m²/C`;
+  resultado.style.display="block";
 });
+
+const overlay=document.getElementById("overlay");
+document.getElementById("btnInfo").onclick=()=>overlay.style.display="flex";
+document.getElementById("closeOverlay").onclick=()=>overlay.style.display="none";
+overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
 </script>
 {% endblock %}

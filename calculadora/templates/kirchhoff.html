@@ -1,12 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>🔋 Reglas de Kirchhoff</h2>
-  <p><strong>ΣV = 0  (Ley de Voltajes)</strong></p>
-  <p><strong>ΣI = 0  (Ley de Corrientes)</strong></p>
+<style>
+body{background:linear-gradient(90deg,#260000,#400000);font-family:"Segoe UI",sans-serif;overflow-x:hidden;}
+.form-container{display:flex;justify-content:center;align-items:flex-start;width:100%;padding:6vh 3vw 12vh;}
+.form-box{background:linear-gradient(145deg,#800000,#4d0000);color:white;width:95%;max-width:550px;border-radius:15px;border:6px double #ff6666;box-shadow:0 3px 12px rgba(0,0,0,0.6);padding:25px;text-align:center;}
+.form-box h2{font-family:"Times New Roman";font-size:28px;font-weight:bold;}
+.form-box h3{font-size:18px;color:#ffcccc;}
+.btn-info-custom{border:2px solid #ff6666;background:white;color:#4d0000;border-radius:10px;padding:8px 15px;transition:0.3s;margin-bottom:10px;}
+.btn-info-custom:hover{background:#ff6666;color:black;}
+.inner-box{background:#fff0f0; color: black;border-radius:12px;padding:20px;margin-top:10px;}
+.overlay{position:fixed;top:0;left:0;width:100dvw;height:100dvh;background:rgba(50,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:999;}
+.definition-box{background:#fff0f0;color:#4d0000;border-radius:12px;padding:25px;width:clamp(280px,90%,450px);border:4px double #ff6666;position:relative;}
+.close-btn{position:absolute;top:10px;right:15px;font-size:22px;font-weight:bold;color:#4d0000;background:none;border:none;cursor:pointer;}
+.close-btn:hover{color:#ff6666;}
+</style>
 
-  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
-    <p>Este módulo te ayuda a comprobar las sumas de voltajes o corrientes en un nodo o malla.</p>
+<div class="form-container">
+  <div class="form-box">
+    <h2>🔋 Reglas de Kirchhoff</h2>
+    <h3>ΣV = 0  |  ΣI = 0</h3>
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <p>Estas leyes no requieren cálculo directo, pero son fundamentales para analizar circuitos eléctricos complejos.</p>
+      <p><strong>Ley de Corrientes:</strong> La suma de las corrientes que entran y salen de un nodo es cero.</p>
+      <p><strong>Ley de Voltajes:</strong> La suma de las tensiones en una malla cerrada es cero.</p>
+    </div>
   </div>
 </div>
+
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de las Leyes de Kirchhoff</h4>
+    <ul>
+      <li><strong>Ley de Corrientes (ΣI = 0):</strong> En un nodo, la corriente que entra es igual a la que sale.</li>
+      <li><strong>Ley de Voltajes (ΣV = 0):</strong> En una malla cerrada, la suma de las diferencias de potencial es cero.</li>
+      <li><strong>I</strong> = Corriente eléctrica (A)</li>
+      <li><strong>V</strong> = Diferencia de potencial (V)</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const overlay=document.getElementById("overlay");
+document.getElementById("btnInfo").onclick=()=>overlay.style.display="flex";
+document.getElementById("closeOverlay").onclick=()=>overlay.style.display="none";
+overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
+</script>
 {% endblock %}

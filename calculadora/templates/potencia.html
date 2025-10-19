@@ -1,26 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>🔌 Potencia en Circuitos - Resistencia</h2>
-  <p><strong>P = V · I</strong></p>
+<style>
+body{background:linear-gradient(90deg,#1a1400,#332b00);font-family:"Segoe UI",sans-serif;overflow-x:hidden;}
+.form-container{display:flex;justify-content:center;align-items:flex-start;width:100%;padding:6vh 3vw 12vh;}
+.form-box{background:linear-gradient(145deg,#665200,#4d3b00);color:white;width:95%;max-width:550px;border-radius:15px;border:6px double #ffcc00;box-shadow:0 3px 12px rgba(0,0,0,0.6);padding:25px;text-align:center;}
+.form-box h2{font-family:"Times New Roman";font-size:28px;font-weight:bold;}
+.form-box h3{font-size:18px;color:#ffee99;}
+.btn-info-custom{border:2px solid #ffcc00;background:white;color:#4d3b00;border-radius:10px;padding:8px 15px;transition:0.3s;margin-bottom:10px;}
+.btn-info-custom:hover{background:#ffcc00;color:black;}
+.inner-box{background:#fffde6;border-radius:12px;padding:20px;margin-top:10px;}
+.input-group{background:#fff5cc;display:flex;align-items:center;justify-content:center;border:2px solid #4d3b00;border-radius:8px;padding:6px;margin:8px auto;}
+.input-group span{font-size:22px;margin-right:8px;color:#4d3b00;}
+.input-group input{border:2px solid #4d3b00;width:80%;text-align:center;border-radius:5px;padding:5px;color:#4d3b00;}
+.btn-calc{border:2px solid #ffcc00;background:linear-gradient(90deg,#ffcc00,#ff9900);color:white;width:85%;border-radius:10px;padding:8px;font-weight:bold;}
+.btn-calc:hover{transform:scale(1.05);}
+#resultado{display:none;background:#332b00;color:white;border:2px solid #ffcc00;border-radius:10px;margin-top:20px;padding:10px 15px;font-weight:bold;}
+.overlay{position:fixed;top:0;left:0;width:100dvw;height:100dvh;background:rgba(50,40,0,0.8);display:none;justify-content:center;align-items:center;z-index:999;}
+.definition-box{background:#fffde6;color:#4d3b00;border-radius:12px;padding:25px;width:clamp(280px,90%,450px);border:4px double #ffcc00;position:relative;}
+.close-btn{position:absolute;top:10px;right:15px;font-size:22px;font-weight:bold;color:#4d3b00;background:none;border:none;cursor:pointer;}
+.close-btn:hover{color:#ffcc00;}
+</style>
 
-  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
-    <form id="formPotencia">
-      <input type="number" step="any" class="form-control mb-3" placeholder="Voltaje V (V)" id="V" required>
-      <input type="number" step="any" class="form-control mb-3" placeholder="Corriente I (A)" id="I" required>
-      <button type="submit" class="btn btn-success w-100">Calcular</button>
-    </form>
-    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+<div class="form-container">
+  <div class="form-box">
+    <h2>⚡ Potencia en Circuitos</h2>
+    <h3>P = V · I</h3>
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <form id="formPotencia">
+        <div class="input-group"><span>⚡</span><input type="number" id="input_V" step="any" placeholder="Voltaje V (V)" required></div>
+        <div class="input-group"><span>🔋</span><input type="number" id="input_I" step="any" placeholder="Corriente I (A)" required></div>
+        <button type="submit" class="btn btn-calc">🧮 Calcular</button>
+      </form>
+    </div>
+
+    <div id="resultado"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de Potencia Eléctrica</h4>
+    <p>La <strong>potencia eléctrica</strong> representa la energía transferida o consumida por unidad de tiempo.</p>
+    <ul>
+      <li><strong>P</strong> = Potencia eléctrica (Watts, W)</li>
+      <li><strong>V</strong> = Voltaje o diferencia de potencial (Voltios, V)</li>
+      <li><strong>I</strong> = Corriente eléctrica (Amperios, A)</li>
+    </ul>
   </div>
 </div>
 
 <script>
-document.getElementById("formPotencia").addEventListener("submit", e => {
+document.getElementById("formPotencia").addEventListener("submit",e=>{
   e.preventDefault();
-  const V = parseFloat(V.value), I = parseFloat(I.value);
-  if (isNaN(V) || isNaN(I)) return resultado.textContent = "⚠️ Ingresa valores válidos.";
-  const P = V * I;
-  resultado.textContent = `Potencia eléctrica = ${P.toLocaleString('es-CO', {maximumFractionDigits: 3})} W`;
+  const V=parseFloat(document.getElementById("input_V").value);
+  const I=parseFloat(document.getElementById("input_I").value);
+  const resultado=document.getElementById("resultado");
+
+  if(isNaN(V)||isNaN(I)){
+    resultado.textContent="⚠️ Ingresa valores válidos.";
+    resultado.style.display="block";
+    return;
+  }
+
+  const P=V*I;
+  resultado.textContent=`Potencia eléctrica = ${P.toLocaleString('es-CO',{maximumFractionDigits:3})} W`;
+  resultado.style.display="block";
 });
+
+const overlay=document.getElementById("overlay");
+document.getElementById("btnInfo").onclick=()=>overlay.style.display="flex";
+document.getElementById("closeOverlay").onclick=()=>overlay.style.display="none";
+overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.style.display="none";});
 </script>
 {% endblock %}

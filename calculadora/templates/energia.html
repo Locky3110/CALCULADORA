@@ -1,27 +1,116 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>💫 Energía Potencial Eléctrica</h2>
-  <p><strong>U = k · (q₁ · q₂) / r</strong></p>
+<style>
+body {
+  background: linear-gradient(90deg,#1a0f1a,#321a33);
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+.form-container {
+  display:flex;justify-content:center;align-items:flex-start;width:100%;padding:6vh 3vw 12vh;
+}
+.form-box {
+  background:linear-gradient(145deg,#4a0057,#2a0033);
+  color:white;width:95%;max-width:550px;border-radius:15px;border:6px double #ff6fff;
+  box-shadow:0 3px 12px rgba(0,0,0,0.6);padding:25px;text-align:center;
+}
+.form-box h2{font-family:"Times New Roman";font-size:28px;font-weight:bold;}
+.form-box h3{font-size:18px;color:#ffb3ff;}
+.btn-info-custom{
+  border:2px solid #ff80ff;background:white;color:#4a0057;border-radius:10px;padding:8px 15px;
+  transition:0.3s;margin-bottom:10px;
+}
+.btn-info-custom:hover{background:#ff80ff;color:black;}
+.inner-box{background:#fff0ff;border-radius:12px;padding:20px;margin-top:10px;}
+.input-group{
+  background:#f7ccff;display:flex;align-items:center;justify-content:center;
+  border:2px solid #4a0057;border-radius:8px;padding:6px;margin:8px auto;
+}
+.input-group span{font-size:22px;margin-right:8px;color:#4a0057;}
+.input-group input{border:2px solid #4a0057;width:80%;text-align:center;border-radius:5px;padding:5px;color:#4a0057;}
+.btn-calc{
+  border:2px solid #ff80ff;background:linear-gradient(90deg,#ff80ff,#cc00cc);color:white;
+  width:85%;border-radius:10px;padding:8px;font-weight:bold;
+}
+.btn-calc:hover{transform:scale(1.05);}
+#resultado{
+  display:none;background:#2a0033;color:white;border:2px solid #ff80ff;border-radius:10px;
+  margin-top:20px;padding:10px 15px;font-weight:bold;
+}
+.overlay{
+  position:fixed;top:0;left:0;width:100dvw;height:100dvh;background:rgba(20,0,30,0.8);
+  display:none;justify-content:center;align-items:center;z-index:999;
+}
+.definition-box{
+  background:#fff0ff;color:#2a0033;border-radius:12px;padding:25px;width:clamp(280px,90%,450px);
+  border:4px double #ff80ff;position:relative;
+}
+.close-btn{
+  position:absolute;top:10px;right:15px;font-size:22px;font-weight:bold;color:#2a0033;
+  background:none;border:none;cursor:pointer;
+}
+.close-btn:hover{color:#ff80ff;}
+</style>
 
-  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
-    <form id="formEnergia">
-      <input type="number" step="any" class="form-control mb-3" placeholder="Carga q₁ (C)" id="q1" required>
-      <input type="number" step="any" class="form-control mb-3" placeholder="Carga q₂ (C)" id="q2" required>
-      <input type="number" step="any" class="form-control mb-3" placeholder="Distancia r (m)" id="r" required>
-      <button type="submit" class="btn btn-success w-100">Calcular</button>
-    </form>
-    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+<div class="form-container">
+  <div class="form-box">
+    <h2>💫 Energía Potencial Eléctrica</h2>
+    <h3>U = k · (q₁ · q₂) / r</h3>
+
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <form id="formEnergia">
+        <div class="input-group"><span>🔋</span><input type="number" step="any" id="input_q1" placeholder="Carga q₁ (C)" required></div>
+        <div class="input-group"><span>⚡</span><input type="number" step="any" id="input_q2" placeholder="Carga q₂ (C)" required></div>
+        <div class="input-group"><span>📏</span><input type="number" step="any" id="input_r" placeholder="Distancia r (m)" required></div>
+        <button type="submit" class="btn btn-calc">🧮 Calcular</button>
+      </form>
+    </div>
+
+    <div id="resultado"></div>
+  </div>
+</div>
+
+<!-- 📘 Ventana modal -->
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de Energía Potencial Eléctrica</h4>
+    <p>La <strong>energía potencial eléctrica (U)</strong> es la energía que posee una carga debido a su posición en un campo eléctrico.</p>
+    <ul>
+      <li><strong>U</strong> = Energía potencial eléctrica (Joules)</li>
+      <li><strong>k</strong> = 8.99 × 10⁹ N·m²/C² (constante de Coulomb)</li>
+      <li><strong>q₁, q₂</strong> = Cargas eléctricas (Coulombs)</li>
+      <li><strong>r</strong> = Distancia entre las cargas (m)</li>
+    </ul>
   </div>
 </div>
 
 <script>
 document.getElementById("formEnergia").addEventListener("submit", e => {
   e.preventDefault();
-  const q1 = parseFloat(q1.value), q2 = parseFloat(q2.value), r = parseFloat(r.value);
-  if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) return resultado.textContent = "⚠️ Valores inválidos.";
-  const U = 8.99e9 * (q1 * q2) / r;
-  resultado.textContent = `Energía potencial = ${U.toLocaleString('es-CO', {maximumFractionDigits: 3})} J`;
+  const q1 = parseFloat(document.getElementById("input_q1").value);
+  const q2 = parseFloat(document.getElementById("input_q2").value);
+  const r = parseFloat(document.getElementById("input_r").value);
+  const resultado = document.getElementById("resultado");
+
+  if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) {
+    resultado.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
+    resultado.style.display = "block";
+    return;
+  }
+
+  const k = 8.99e9;
+  const U = k * (q1 * q2) / r;
+
+  resultado.textContent = `Energía potencial eléctrica = ${U.toLocaleString('es-CO', { maximumFractionDigits: 3 })} J`;
+  resultado.style.display = "block";
 });
+
+const overlay = document.getElementById("overlay");
+document.getElementById("btnInfo").onclick = () => overlay.style.display = "flex";
+document.getElementById("closeOverlay").onclick = () => overlay.style.display = "none";
+overlay.addEventListener("click", e => { if (e.target === overlay) overlay.style.display = "none"; });
 </script>
 {% endblock %}

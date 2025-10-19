@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>🧲 Ley de Ampere</h2>
+  <p><strong>B = (μ₀ · I) / (2π · r)</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formAmpere">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Corriente I (A)" id="I" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Distancia r (m)" id="r" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formAmpere").addEventListener("submit", e => {
+  e.preventDefault();
+  const I = parseFloat(I.value), r = parseFloat(r.value);
+  if (isNaN(I) || isNaN(r) || r === 0) return resultado.textContent = "⚠️ Valores inválidos.";
+  const mu0 = 4 * Math.PI * 1e-7;
+  const B = (mu0 * I) / (2 * Math.PI * r);
+  resultado.textContent = `Campo magnético = ${B.toExponential(3)} T`;
+});
+</script>
+{% endblock %}

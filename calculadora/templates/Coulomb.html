@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(90deg, #eaffea, #b8f5b8);
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+  }
+
+  .form-box {
+    background: linear-gradient(145deg, #006400, #004d00);
+    color: white;
+    width: 850px;
+    border-radius: 15px;
+    border: 10px double white;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .form-box h2 {
+    font-size: 45px;
+    margin: 0;
+    color: white;
+  }
+
+  .form-box h3 {
+    margin-top: 5px;
+    font-size: 30px;
+    color: #e7ffe7;
+  }
+
+  .inner-box {
+    background: #ebffe8;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 25px;
+  }
+
+  .input-group {
+    background: #b5f1b5;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 10px;
+    width: 90%;
+    border: 3px solid #004d00;
+    margin: 10px auto;
+  }
+
+  .input-group span {
+    font-size: 28px;
+    margin-right: 10px;
+    color: #004d00;
+  }
+
+  .input-group input {
+    border: 3px solid #004d00;
+    outline: none;
+    width: 85%;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 6px;
+    text-align: center;
+    color: #004d00;
+    background-color: white;
+  }
+
+  /* ✅ Botones */
+  .btn-calc {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22px;
+    width: 80%;
+    margin-top: 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+
+  /* 📘 Botón blanco que cambia al pasar el mouse */
+  .btn-info-custom {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22px;
+    width: 80%;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 2px solid #18ea26;
+    background-color: white;
+    color: #006400;
+    transition: all 0.3s ease;
+  }
+
+  .btn-info-custom:hover {
+    background-color: #18ea26;
+    color: white;
+    border-color: #18ea26;
+    transform: scale(1.03);
+  }
+
+  .resultado {
+    font-size: 20px;
+    color: #004d00;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  /* 🔹 Ventana emergente */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 50, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+  }
+
+  .definition-box {
+    background: #ebffe8;
+    color: #004d00;
+    border-radius: 15px;
+    padding: 30px 40px;
+    width: 60%;
+    border: 5px double #004d00;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: left;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+  }
+
+  .definition-box h4 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 15px;
+  }
+
+  .definition-box strong {
+    color: #006400;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #004d00;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    color: #008000;
+  }
+
+</style>
+
+<div class="form-container">
+  <div class="form-box">
+    <h2>🔴 Ley de Coulomb</h2>
+    <h3>F = k · (q₁ · q₂) / r²</h3>
+
+    <!-- 📘 Botón blanco -->
+    <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
+
+    <div class="inner-box">
+      <form id="formCoulomb">
+        <div class="input-group">
+          <span>🔋</span>
+          <input type="number" step="any" id="q1" placeholder="Carga q₁ (C)" required>
+        </div>
+
+        <div class="input-group">
+          <span>⚡</span>
+          <input type="number" step="any" id="q2" placeholder="Carga q₂ (C)" required>
+        </div>
+
+        <div class="input-group">
+          <span>📏</span>
+          <input type="number" step="any" id="r" placeholder="Distancia r (m)" required>
+        </div>
+
+        <button type="submit" class="btn btn-outline-success btn-calc">🧮 Calcular</button>
+      </form>
+    </div>
+
+    <div id="resultado" class="resultado" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- 🪟 Ventana flotante -->
+<div class="overlay" id="overlay">
+  <div class="definition-box">
+    <button class="close-btn" id="closeOverlay">&times;</button>
+    <h4>📘 Definición de la Ley de Coulomb</h4>
+    <p><strong>La Ley de Coulomb</strong> establece que la fuerza eléctrica entre dos cargas es directamente proporcional
+       al producto de sus cargas e inversamente proporcional al cuadrado de la distancia que las separa.</p>
+    <p><strong>Donde:</strong></p>
+    <ul>
+      <li><strong>F</strong> = Fuerza eléctrica (N)</li>
+      <li><strong>k</strong> = Constante de Coulomb (9 × 10⁹ N·m²/C²)</li>
+      <li><strong>q₁</strong>, <strong>q₂</strong> = Cargas eléctricas (Coulomb)</li>
+      <li><strong>r</strong> = Distancia entre las cargas (m)</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // 🧮 Cálculo de la fuerza eléctrica
+  document.getElementById("formCoulomb").addEventListener("submit", e => {
+    e.preventDefault();
+    const q1 = parseFloat(document.getElementById("q1").value);
+    const q2 = parseFloat(document.getElementById("q2").value);
+    const r = parseFloat(document.getElementById("r").value);
+    const res = document.getElementById("resultado");
+
+    if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) {
+      res.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
+      res.style.display = "block";
+      return;
+    }
+
+    const F = 8.99e9 * (q1 * q2) / (r ** 2);
+    res.textContent = `Fuerza eléctrica = ${F.toLocaleString('es-CO', { maximumFractionDigits: 3 })} N`;
+    res.style.display = "block";
+  });
+
+  // 📘 Mostrar/ocultar definición
+  const overlay = document.getElementById("overlay");
+  const btnInfo = document.getElementById("btnInfo");
+  const closeOverlay = document.getElementById("closeOverlay");
+
+  btnInfo.addEventListener("click", () => overlay.style.display = "flex");
+  closeOverlay.addEventListener("click", () => overlay.style.display = "none");
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) overlay.style.display = "none";
+  });
+</script>
+{% endblock %}

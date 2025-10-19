@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>🔌 Potencia en Circuitos - Resistencia</h2>
+  <p><strong>P = V · I</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formPotencia">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Voltaje V (V)" id="V" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Corriente I (A)" id="I" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formPotencia").addEventListener("submit", e => {
+  e.preventDefault();
+  const V = parseFloat(V.value), I = parseFloat(I.value);
+  if (isNaN(V) || isNaN(I)) return resultado.textContent = "⚠️ Ingresa valores válidos.";
+  const P = V * I;
+  resultado.textContent = `Potencia eléctrica = ${P.toLocaleString('es-CO', {maximumFractionDigits: 3})} W`;
+});
+</script>
+{% endblock %}

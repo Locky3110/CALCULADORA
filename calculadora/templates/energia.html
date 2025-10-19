@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>💫 Energía Potencial Eléctrica</h2>
+  <p><strong>U = k · (q₁ · q₂) / r</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formEnergia">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Carga q₁ (C)" id="q1" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Carga q₂ (C)" id="q2" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Distancia r (m)" id="r" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formEnergia").addEventListener("submit", e => {
+  e.preventDefault();
+  const q1 = parseFloat(q1.value), q2 = parseFloat(q2.value), r = parseFloat(r.value);
+  if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) return resultado.textContent = "⚠️ Valores inválidos.";
+  const U = 8.99e9 * (q1 * q2) / r;
+  resultado.textContent = `Energía potencial = ${U.toLocaleString('es-CO', {maximumFractionDigits: 3})} J`;
+});
+</script>
+{% endblock %}

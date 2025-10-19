@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>🌐 Ley de Faraday</h2>
+  <p><strong>ε = -N · (ΔΦ / Δt)</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formFaraday">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Número de espiras N" id="N" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Cambio en flujo magnético ΔΦ (Wb)" id="phi" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Tiempo Δt (s)" id="t" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formFaraday").addEventListener("submit", e => {
+  e.preventDefault();
+  const N = parseFloat(N.value), phi = parseFloat(phi.value), t = parseFloat(t.value);
+  if (isNaN(N) || isNaN(phi) || isNaN(t) || t === 0) return resultado.textContent = "⚠️ Valores inválidos.";
+  const emf = -N * (phi / t);
+  resultado.textContent = `Fuerza electromotriz ε = ${emf.toLocaleString('es-CO', {maximumFractionDigits: 3})} V`;
+});
+</script>
+{% endblock %}

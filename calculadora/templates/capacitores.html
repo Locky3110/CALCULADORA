@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>⚡ Capacitores y Capacitancias</h2>
+  <p><strong>C = Q / V</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formCapacitor">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Carga Q (C)" id="Q" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Voltaje V (V)" id="V" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formCapacitor").addEventListener("submit", e => {
+  e.preventDefault();
+  const Q = parseFloat(Q.value), V = parseFloat(V.value);
+  if (isNaN(Q) || isNaN(V) || V === 0) return resultado.textContent = "⚠️ Valores inválidos.";
+  const C = Q / V;
+  resultado.textContent = `Capacitancia = ${C.toExponential(3)} F`;
+});
+</script>
+{% endblock %}

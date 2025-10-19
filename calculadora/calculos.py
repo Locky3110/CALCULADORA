@@ -1,21 +1,42 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+import math
 
-# ✅ Nombre del blueprint y variable = app (como pediste)
 app = Blueprint('calculos_DE', __name__)
 
 @app.route('/')
 def inicio():
     return render_template('base.html')
 
-@app.route('/calcular', methods=['POST'])
-def calcular():
-    datos = request.json
-    voltaje = float(datos.get('voltaje', 0))
-    corriente = float(datos.get('corriente', 0))
-    potencia = voltaje * corriente
-    return jsonify({'potencia_watts': potencia})
+# ✅ Rutas individuales para cada tema
 
-# @app.route('/cerrar_sesion')
-# def cerrar_Sesion():
-#     # ✅ redirige correctamente a la raíz del blueprint (inicio)
-#     return redirect(url_for('calculos_DE.inicio'))
+@app.route('/coulomb')
+def coulomb():
+    return render_template('coulomb.html')
+
+@app.route('/gauss')
+def gauss():
+    return render_template('gauss.html')
+
+@app.route('/energia')
+def energia():
+    return render_template('energia.html')
+
+@app.route('/capacitores')
+def capacitores():
+    return render_template('capacitores.html')
+
+@app.route('/potencia')
+def potencia():
+    return render_template('potencia.html')
+
+@app.route('/kirchhoff')
+def kirchhoff():
+    return render_template('kirchhoff.html')
+
+@app.route('/ampere')
+def ampere():
+    return render_template('ampere.html')
+
+@app.route('/faraday')
+def faraday():
+    return render_template('faraday.html')

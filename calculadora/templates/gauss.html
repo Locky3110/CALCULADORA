@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>🌀 Ley de Gauss</h2>
+  <p><strong>Φ = Q / ε₀</strong></p>
+
+  <div class="p-4 shadow-sm bg-light rounded-4 mx-auto" style="max-width: 700px;">
+    <form id="formGauss">
+      <input type="number" step="any" class="form-control mb-3" placeholder="Carga Q (C)" id="Q" required>
+      <input type="number" step="any" class="form-control mb-3" placeholder="Constante dieléctrica ε₀ (8.85e-12)" id="e0" value="8.85e-12" required>
+      <button type="submit" class="btn btn-success w-100">Calcular</button>
+    </form>
+    <h4 id="resultado" class="mt-4 text-success fw-bold"></h4>
+  </div>
+</div>
+
+<script>
+document.getElementById("formGauss").addEventListener("submit", e => {
+  e.preventDefault();
+  const Q = parseFloat(Q.value), e0 = parseFloat(e0.value);
+  if (isNaN(Q) || isNaN(e0) || e0 === 0) return resultado.textContent = "⚠️ Ingresa valores válidos.";
+  const phi = Q / e0;
+  resultado.textContent = `Flujo eléctrico Φ = ${phi.toLocaleString('es-CO', {maximumFractionDigits: 3})} N·m²/C`;
+});
+</script>
+{% endblock %}

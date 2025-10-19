@@ -5,6 +5,6 @@ def create_app():
 
     # ✅ Importa y registra el blueprint "app" de calculos.py
     from .calculos import app as calculos_DE
-    app.register_blueprint(calculos_DE)
+    app.register_blueprint(calculos_DE, url_prefix='/')
 
     return app

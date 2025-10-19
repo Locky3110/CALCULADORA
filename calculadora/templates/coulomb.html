@@ -1,96 +1,101 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-  body {
+ body {
     background: linear-gradient(90deg, #eaffea, #b8f5b8);
-    font-family: 'Times New Roman', Times, serif;
-    margin: 0;
-    padding: 0;
   }
 
-  /* Contenedor centrado adaptable */
+  /* 🔹 Contenedor principal */
   .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 85vh;
-    padding: 20px;
+    width: 100%;
+    min-height: calc(100dvh - 180px);
+    padding: 2dvh 3vw;
   }
 
-  /* Caja principal responsive */
+  /* 🔹 Caja central más pequeña y adaptable */
   .form-box {
     background: linear-gradient(145deg, #006400, #004d00);
     color: white;
-    width: clamp(320px, 80%, 850px);  /* se adapta al tamaño de pantalla */
+    width: 95%;
+    max-width: 550px;           /* 🔸 antes era 850px */
     border-radius: 15px;
-    border: 8px double white;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-    padding: clamp(20px, 4vw, 40px);
+    border: 6px double white;   /* 🔸 más fino */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    padding: clamp(15px, 3vw, 25px);
     text-align: center;
+    transition: transform 0.3s ease;
   }
 
+  .form-box:hover {
+    transform: scale(1.01);
+  }
+
+  /* 🔹 Título y subtítulo */
   .form-box h2 {
-    font-size: clamp(26px, 4vw, 45px);
+    font-size: clamp(18px, 4vw, 32px);
     margin: 0;
+    font-weight: bold;
   }
 
   .form-box h3 {
-    margin-top: 10px;
-    font-size: clamp(18px, 2.5vw, 30px);
+    margin-top: 5px;
+    font-size: clamp(14px, 3vw, 20px);
     color: #e7ffe7;
   }
 
-  /* Contenedor interno adaptable */
+  /* 🔹 Contenedor interior */
   .inner-box {
     background: #ebffe8;
-    border-radius: 15px;
-    padding: clamp(15px, 3vw, 25px);
-    margin-top: 20px;
+    border-radius: 12px;
+    padding: clamp(10px, 3vw, 20px);
+    margin-top: 15px;
   }
 
-  /* Campos de entrada */
+  /* 🔹 Entradas más compactas */
   .input-group {
     background: #b5f1b5;
     display: flex;
     align-items: center;
-    padding: 8px;
-    border-radius: 10px;
-    width: 90%;
-    border: 3px solid #004d00;
-    margin: 10px auto;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid #004d00;
+    margin: 8px auto;
+    box-sizing: border-box;
   }
 
   .input-group span {
-    font-size: clamp(20px, 3vw, 28px);
-    margin-right: 10px;
+    font-size: clamp(16px, 3vw, 22px);
+    margin-right: 8px;
     color: #004d00;
   }
 
   .input-group input {
-    border: 3px solid #004d00;
+    border: 2px solid #004d00;
     outline: none;
-    width: 85%;
-    font-size: clamp(14px, 2vw, 20px);
+    width: 80%;
+    font-size: clamp(12px, 2vw, 18px);
     border-radius: 5px;
-    padding: 6px;
+    padding: 5px;
     text-align: center;
     color: #004d00;
     background-color: white;
   }
 
-  /* Botones */
-  .btn-calc,
-  .btn-info-custom {
+  /* 🔹 Botones compactos */
+  .btn-calc, .btn-info-custom {
     font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(16px, 2vw, 22px);
-    width: 80%;
-    margin-top: 20px;
+    font-size: clamp(13px, 2vw, 18px);
+    width: 85%;
+    margin-top: 15px;
     border-radius: 10px;
     transition: all 0.3s ease;
-    padding: clamp(8px, 2vw, 10px);
+    padding: clamp(6px, 2vw, 10px);
   }
 
-  /* 📘 Botón blanco con hover */
   .btn-info-custom {
     border: 2px solid #18ea26;
     background-color: white;
@@ -100,65 +105,59 @@
   .btn-info-custom:hover {
     background-color: #18ea26;
     color: white;
-    transform: scale(1.03);
   }
 
-  /* 🧮 Botón calcular */
   .btn-calc {
     border: 2px solid #18ea26;
   }
 
-  /* Resultado */
+  /* 🔹 Resultado */
   .resultado {
-    font-size: clamp(14px, 2vw, 20px);
+    font-size: clamp(12px, 2vw, 18px);
     color: #004d00;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 8px;
     border-radius: 8px;
-    margin-top: 20px;
+    margin-top: 15px;
     font-weight: bold;
   }
 
-  /* Ventana emergente responsive */
+  /* 🔹 Ventana flotante */
   .overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
     background: rgba(0, 50, 0, 0.7);
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    z-index: 20;
     padding: 15px;
+    box-sizing: border-box;
   }
 
   .definition-box {
     background: #ebffe8;
     color: #004d00;
-    border-radius: 15px;
-    padding: clamp(20px, 3vw, 40px);
-    width: clamp(300px, 80%, 600px);
-    border: 5px double #004d00;
-    font-size: clamp(14px, 2vw, 18px);
-    line-height: 1.6;
+    border-radius: 12px;
+    padding: clamp(15px, 3vw, 25px);
+    width: clamp(260px, 85%, 450px);
+    border: 4px double #004d00;
+    font-size: clamp(13px, 2vw, 16px);
+    line-height: 1.5;
     text-align: left;
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
     position: relative;
   }
 
-  .definition-box h4 {
-    text-align: center;
-    font-size: clamp(18px, 3vw, 26px);
-    margin-bottom: 15px;
-  }
-
+  /* 🔹 Botón de cierre */
   .close-btn {
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: clamp(18px, 3vw, 24px);
+    font-size: clamp(16px, 3vw, 22px);
     font-weight: bold;
     color: #004d00;
     background: none;
@@ -170,11 +169,10 @@
     color: #008000;
   }
 
-  /* 📱 Ajustes para pantallas pequeñas */
+  /* 📱 Ajuste móvil */
   @media (max-width: 600px) {
     .input-group {
       flex-direction: column;
-      gap: 5px;
       text-align: center;
     }
 
@@ -182,14 +180,13 @@
       width: 100%;
     }
 
-    .btn-calc,
-    .btn-info-custom {
+    .btn-calc, .btn-info-custom {
       width: 100%;
     }
   }
+
 </style>
 
-<!-- 💚 CONTENIDO -->
 <div class="form-container">
   <div class="form-box">
     <h2>🔴 Ley de Coulomb</h2>
@@ -219,14 +216,12 @@
   </div>
 </div>
 
-<!-- 🪟 Ventana flotante -->
 <div class="overlay" id="overlay">
   <div class="definition-box">
     <button class="close-btn" id="closeOverlay">&times;</button>
     <h4>📘 Definición de la Ley de Coulomb</h4>
     <p><strong>La Ley de Coulomb</strong> establece que la fuerza eléctrica entre dos cargas es directamente proporcional
        al producto de sus cargas e inversamente proporcional al cuadrado de la distancia que las separa.</p>
-    <p><strong>Donde:</strong></p>
     <ul>
       <li><strong>F</strong> = Fuerza eléctrica (N)</li>
       <li><strong>k</strong> = Constante de Coulomb (9 × 10⁹ N·m²/C²)</li>
@@ -237,34 +232,26 @@
 </div>
 
 <script>
-  // 🧮 Calcular fuerza eléctrica
-  document.getElementById("formCoulomb").addEventListener("submit", e => {
+  const form = document.getElementById("formCoulomb");
+  const res = document.getElementById("resultado");
+  form.addEventListener("submit", e => {
     e.preventDefault();
-    const q1 = parseFloat(document.getElementById("q1").value);
-    const q2 = parseFloat(document.getElementById("q2").value);
-    const r = parseFloat(document.getElementById("r").value);
-    const res = document.getElementById("resultado");
-
+    const q1 = parseFloat(q1.value);
+    const q2 = parseFloat(q2.value);
+    const r = parseFloat(r.value);
     if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) {
       res.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
       res.style.display = "block";
       return;
     }
-
     const F = 8.99e9 * (q1 * q2) / (r ** 2);
     res.textContent = `Fuerza eléctrica = ${F.toLocaleString('es-CO', { maximumFractionDigits: 3 })} N`;
     res.style.display = "block";
   });
 
-  // 📘 Ventana emergente
   const overlay = document.getElementById("overlay");
-  const btnInfo = document.getElementById("btnInfo");
-  const closeOverlay = document.getElementById("closeOverlay");
-
-  btnInfo.addEventListener("click", () => overlay.style.display = "flex");
-  closeOverlay.addEventListener("click", () => overlay.style.display = "none");
-  overlay.addEventListener("click", e => {
-    if (e.target === overlay) overlay.style.display = "none";
-  });
+  document.getElementById("btnInfo").onclick = () => overlay.style.display = "flex";
+  document.getElementById("closeOverlay").onclick = () => overlay.style.display = "none";
+  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.style.display = "none"; });
 </script>
 {% endblock %}

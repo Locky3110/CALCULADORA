@@ -2,128 +2,202 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
   <title>{% block title %}DISTRI-CALC{% endblock %}</title>
   <link rel="icon" type="image/png" href="#">
 
-  <!-- BOOTSTRAP CSS -->
+  <!-- BOOTSTRAP -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- 🌟 ESTILO GENERAL CON ANIMACIONES -->
   <style>
-    /* ---------- GENERAL ---------- */
-    body {
+    /* -------- GENERAL -------- */
+    html, body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       font-family: 'Georgia', 'Times New Roman', serif;
+      overflow-x: hidden;
       background-color: #ffffff;
-      color: #111;
+      scroll-behavior: smooth;
     }
 
-    /* ---------- NAVBAR ---------- */
+    /* -------- NAVBAR -------- */
     .navbar {
       background-color: #18ea26 !important;
-      height: 100px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      animation: fadeIn 1s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      padding: 5px 25px;
+      z-index: 1000;
     }
 
     .navbar .container-fluid {
       display: flex;
       align-items: center;
-      padding-left: 40px;
-      padding-right: 40px;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 30px;
     }
 
     .navbar-brand {
       font-weight: bold;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
       color: black !important;
       text-align: center;
       line-height: 1.1;
-      margin-right: 50px;
+      flex-shrink: 0;
+    }
+
+    .navbar-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
     }
 
     .navbar-nav .nav-link {
       color: black !important;
       font-weight: bold;
-      margin-right: 8px;
-      font-size: 1.2rem;
-      transition: 0.2s;
+      font-size: clamp(0.9rem, 1vw, 1.1rem);
+      transition: all 0.2s ease;
+      border-radius: 6px;
+      padding: 4px 8px;
     }
 
     .navbar-nav .nav-link:hover {
       color: white !important;
+      background-color: rgba(0,0,0,0.15);
       transform: scale(1.05);
     }
 
-    /* ---------- CONTENIDO PRINCIPAL ---------- */
+    @media (max-width: 991px) {
+      .navbar .container-fluid {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .navbar-brand {
+        margin-bottom: 5px;
+      }
+      .navbar-collapse {
+        background-color: #18ea26;
+        padding: 10px 0;
+        border-radius: 10px;
+        width: 100%;
+      }
+      .navbar-nav {
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+
+    /* -------- CONTENIDO -------- */
     .main {
-      margin-top: 110px;
-      margin-bottom: 70px;
-      animation: fadeIn 1.2s ease-in-out;
+      min-height: calc(100vh - 130px);
+      padding: 120px 10px 80px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
     }
 
-    h2 {
-      text-align: center;
-      color: #111;
-      font-weight: bold;
-      margin-bottom: 15px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    p {
-      text-align: center;
-      font-size: 1.1rem;
-      color: #333;
-      margin-bottom: 20px;
-      animation: fadeIn 1.2s ease-in-out;
-    }
-
-    /* ---------- FORMULARIOS ---------- */
+    /* -------- FORMULARIO DE DATOS -------- */
     form {
-      max-width: 520px;
+      width: 100%;
+      max-width: 350px;
       margin: 0 auto;
-      background: #f6f6f6;
-      padding: 25px;
+      background: #f3fff3;
+      padding: 15px;
       border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      animation: fadeIn 1.3s ease-in-out;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .form-label {
+      font-weight: bold;
+      color: #006400;
+      width: 100%;
+      margin-bottom: 5px;
+      text-align: left;
     }
 
     input.form-control {
-      border: 1.5px solid #0bbf00;
+      width: 100%;
+      border: 2px solid #0bbf00;
       border-radius: 10px;
       padding: 10px;
+      font-size: 1rem;
+      text-align: center;
+      transition: 0.2s;
+      background-color: #ffffff;
     }
 
     input.form-control:focus {
       border-color: #18ea26;
       box-shadow: 0 0 8px #18ea26;
+      outline: none;
     }
 
+    /* ---------- BOTÓN ---------- */
     button.btn-success {
       background: linear-gradient(90deg, #18ea26, #0bbf00);
       border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      font-size: 1.1rem;
       font-weight: bold;
       color: white;
-      transition: 0.3s;
+      transition: all 0.25s ease;
+      width: 100%;
+      max-width: 300px;
     }
 
     button.btn-success:hover {
-      background: linear-gradient(90deg, #0bbf00, #18ea26);
       transform: scale(1.05);
+      background: linear-gradient(90deg, #0bbf00, #18ea26);
     }
 
+    /* ---------- RESULTADO ---------- */
     #resultado {
       text-align: center;
-      color: #007a00;
-      font-size: 1.3rem;
-      margin-top: 20px;
+      color: #004d00;
+      font-size: 1.2rem;
       font-weight: bold;
-      animation: fadeIn 1.4s ease-in-out;
+      margin-top: 10px;
+      word-wrap: break-word;
     }
 
-    /* ---------- FOOTER ---------- */
+    /* ---------- ADAPTACIÓN MÓVIL ---------- */
+    @media (max-width: 768px) {
+      form {
+        max-width: 95%;
+        padding: 15px;
+        gap: 12px;
+      }
+
+      input.form-control {
+        font-size: 0.95rem;
+        padding: 8px;
+      }
+
+      button.btn-success {
+        font-size: 1rem;
+        padding: 10px;
+        width: 100%;
+      }
+
+      #resultado {
+        font-size: 1rem;
+      }
+    }
+
+    /* -------- FOOTER -------- */
     .sub-bar {
       position: fixed;
       bottom: 0;
@@ -131,57 +205,31 @@
       width: 100%;
       background-color: #18ea26;
       color: black;
-      height: 53px;
+      height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: bold;
-      z-index: 10;
       box-shadow: 0 -3px 8px rgba(0,0,0,0.1);
-      animation: fadeIn 1.5s ease-in-out;
-    }
-
-    /* ---------- ANIMACIONES ---------- 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }*/
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 768px) {
-      .navbar {
-        height: auto;
-      }
-      .navbar-brand {
-        font-size: 1.6rem;
-      }
-      h2 {
-        font-size: 1.4rem;
-      }
-      form {
-        padding: 15px;
-      }
+      text-align: center;
+      z-index: 999;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ✅ NAVBAR RESPONSIVE -->
+  <!-- ✅ NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">DISTRI<br>ELECTRI</a>
-
-      <!-- Botón menú móvil -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
         aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
-      <!-- Enlaces -->
-      <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <div class="collapse navbar-collapse justify-content-start" id="navbarMenu">
+        <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="{{ url_for('calculos_DE.coulomb') }}">🔴 Ley de Coulomb</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('calculos_DE.gauss') }}">🌀 Ley de Gauss</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('calculos_DE.energia') }}">💫 Energía Potencial Eléctrica</a></li>
@@ -195,15 +243,15 @@
     </div>
   </nav>
 
-  <!-- ✅ CONTENIDO PRINCIPAL -->
-  <div class="main container">
+  <!-- ✅ CONTENIDO -->
+  <main class="main container">
     {% block content %}{% endblock %}
-  </div>
+  </main>
 
   <!-- ✅ FOOTER -->
-  <div class="sub-bar">
+  <footer class="sub-bar">
     CALCULADORA DE DISTRI-ELECTRI ⚡
-  </div>
+  </footer>
 
   <!-- BOOTSTRAP JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -234,24 +234,34 @@
 <script>
   const form = document.getElementById("formCoulomb");
   const res = document.getElementById("resultado");
+
   form.addEventListener("submit", e => {
     e.preventDefault();
-    const q1 = parseFloat(q1.value);
-    const q2 = parseFloat(q2.value);
-    const r = parseFloat(r.value);
-    if (isNaN(q1) || isNaN(q2) || isNaN(r) || r === 0) {
+
+    // ✅ Obtener valores correctamente
+    const q1Val = parseFloat(document.getElementById("q1").value);
+    const q2Val = parseFloat(document.getElementById("q2").value);
+    const rVal  = parseFloat(document.getElementById("r").value);
+
+    if (isNaN(q1Val) || isNaN(q2Val) || isNaN(rVal) || rVal === 0) {
       res.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
       res.style.display = "block";
       return;
     }
-    const F = 8.99e9 * (q1 * q2) / (r ** 2);
+
+    // ✅ Cálculo de la Fuerza eléctrica
+    const F = 8.99e9 * (q1Val * q2Val) / (rVal ** 2);
     res.textContent = `Fuerza eléctrica = ${F.toLocaleString('es-CO', { maximumFractionDigits: 3 })} N`;
     res.style.display = "block";
   });
 
+  // ✅ Ventana modal
   const overlay = document.getElementById("overlay");
   document.getElementById("btnInfo").onclick = () => overlay.style.display = "flex";
   document.getElementById("closeOverlay").onclick = () => overlay.style.display = "none";
-  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.style.display = "none"; });
+  overlay.addEventListener("click", e => { 
+    if (e.target === overlay) overlay.style.display = "none"; 
+  });
 </script>
+
 {% endblock %}

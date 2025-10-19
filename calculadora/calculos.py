@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 import math
 
-app = Blueprint('calculos_DE', __name__)
+app = Blueprint('calculos_DE', __name__,template_folder='calculadora/templates')
 
 @app.route('/')
 def inicio():

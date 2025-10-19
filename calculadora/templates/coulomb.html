@@ -1,60 +1,72 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
- body {
+  body {
     background: linear-gradient(90deg, #eaffea, #b8f5b8);
   }
 
-  /* 🔹 Contenedor principal */
+  /* 🔹 Contenedor general */
   .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: calc(100dvh - 180px);
-    padding: 2dvh 3vw;
+    min-height: calc(100vh - 140px);
+    padding: 20px 3vw 90px;
+    box-sizing: border-box;
   }
 
-  /* 🔹 Caja central más pequeña y adaptable */
+  /* 🔹 Caja verde oscura principal */
   .form-box {
     background: linear-gradient(145deg, #006400, #004d00);
     color: white;
     width: 95%;
-    max-width: 550px;           /* 🔸 antes era 850px */
+    max-width: 550px;
     border-radius: 15px;
-    border: 6px double white;   /* 🔸 más fino */
+    border: 6px double white;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
     padding: clamp(15px, 3vw, 25px);
     text-align: center;
-    transition: transform 0.3s ease;
   }
 
-  .form-box:hover {
-    transform: scale(1.01);
-  }
-
-  /* 🔹 Título y subtítulo */
   .form-box h2 {
-    font-size: clamp(18px, 4vw, 32px);
-    margin: 0;
+    font-size: clamp(20px, 4vw, 32px);
     font-weight: bold;
+    margin-bottom: 5px;
   }
 
   .form-box h3 {
-    margin-top: 5px;
     font-size: clamp(14px, 3vw, 20px);
     color: #e7ffe7;
+    margin-bottom: 15px;
   }
 
-  /* 🔹 Contenedor interior */
+  /* 🔹 Botón Ver Definición */
+  .btn-info-custom {
+    font-family: 'Times New Roman', serif;
+    font-size: clamp(13px, 2vw, 18px);
+    border: 2px solid #18ea26;
+    background-color: white;
+    color: #006400;
+    border-radius: 10px;
+    padding: 8px 15px;
+    transition: 0.3s;
+    margin-bottom: 10px;
+  }
+
+  .btn-info-custom:hover {
+    background-color: #18ea26;
+    color: white;
+  }
+
+  /* 🔹 Caja blanca interna */
   .inner-box {
     background: #ebffe8;
     border-radius: 12px;
     padding: clamp(10px, 3vw, 20px);
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
-  /* 🔹 Entradas más compactas */
   .input-group {
     background: #b5f1b5;
     display: flex;
@@ -68,7 +80,7 @@
   }
 
   .input-group span {
-    font-size: clamp(16px, 3vw, 22px);
+    font-size: 22px;
     margin-right: 8px;
     color: #004d00;
   }
@@ -85,41 +97,42 @@
     background-color: white;
   }
 
-  /* 🔹 Botones compactos */
-  .btn-calc, .btn-info-custom {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(13px, 2vw, 18px);
-    width: 85%;
-    margin-top: 15px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    padding: clamp(6px, 2vw, 10px);
-  }
-
-  .btn-info-custom {
-    border: 2px solid #18ea26;
-    background-color: white;
-    color: #006400;
-  }
-
-  .btn-info-custom:hover {
-    background-color: #18ea26;
-    color: white;
-  }
-
+  /* 🔹 Botón Calcular */
   .btn-calc {
     border: 2px solid #18ea26;
+    background: linear-gradient(90deg, #18ea26, #0bbf00);
+    color: white;
+    font-size: clamp(13px, 2vw, 18px);
+    width: 85%;
+    border-radius: 10px;
+    transition: 0.3s;
+    padding: clamp(6px, 2vw, 10px);
+    font-weight: bold;
   }
 
-  /* 🔹 Resultado */
-  .resultado {
-    font-size: clamp(12px, 2vw, 18px);
-    color: #004d00;
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 8px;
-    border-radius: 8px;
-    margin-top: 15px;
+  .btn-calc:hover {
+    background: linear-gradient(90deg, #0bbf00, #18ea26);
+    transform: scale(1.05);
+  }
+
+  /* 🔹 Resultado dentro del área verde oscuro */
+  #resultado {
+    display: none;
+    background-color: #004d00;
+    color: white;
+    border: 2px solid #18ea26;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: clamp(14px, 2vw, 18px);
     font-weight: bold;
+    box-shadow: 0 0 10px rgba(24, 234, 38, 0.5);
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
   }
 
   /* 🔹 Ventana flotante */
@@ -133,9 +146,8 @@
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 20;
+    z-index: 999;
     padding: 15px;
-    box-sizing: border-box;
   }
 
   .definition-box {
@@ -152,7 +164,6 @@
     position: relative;
   }
 
-  /* 🔹 Botón de cierre */
   .close-btn {
     position: absolute;
     top: 10px;
@@ -169,22 +180,11 @@
     color: #008000;
   }
 
-  /* 📱 Ajuste móvil */
   @media (max-width: 600px) {
-    .input-group {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .input-group input {
-      width: 100%;
-    }
-
-    .btn-calc, .btn-info-custom {
-      width: 100%;
-    }
+    .input-group { flex-direction: column; }
+    .input-group input { width: 100%; }
+    .btn-calc, .btn-info-custom { width: 100%; }
   }
-
 </style>
 
 <div class="form-container">
@@ -192,30 +192,34 @@
     <h2>🔴 Ley de Coulomb</h2>
     <h3>F = k · (q₁ · q₂) / r²</h3>
 
+    <!-- 📘 Botón Ver Definición -->
     <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
 
+    <!-- 📦 Inputs y botón Calcular -->
     <div class="inner-box">
       <form id="formCoulomb">
         <div class="input-group">
           <span>🔋</span>
-          <input type="number" step="any" id="q1" placeholder="Carga q₁ (C)" required>
+          <input type="number" step="any" id="input_q1" placeholder="Carga q₁ (C)" required>
         </div>
         <div class="input-group">
           <span>⚡</span>
-          <input type="number" step="any" id="q2" placeholder="Carga q₂ (C)" required>
+          <input type="number" step="any" id="input_q2" placeholder="Carga q₂ (C)" required>
         </div>
         <div class="input-group">
           <span>📏</span>
-          <input type="number" step="any" id="r" placeholder="Distancia r (m)" required>
+          <input type="number" step="any" id="input_r" placeholder="Distancia r (m)" required>
         </div>
-        <button type="submit" class="btn btn-outline-success btn-calc">🧮 Calcular</button>
+        <button type="submit" class="btn btn-calc">🧮 Calcular</button>
       </form>
     </div>
 
-    <div id="resultado" class="resultado" style="display:none;"></div>
+    <!-- 💡 Resultado dentro del bloque verde oscuro -->
+    <div id="resultado"></div>
   </div>
 </div>
 
+<!-- 📖 Ventana modal -->
 <div class="overlay" id="overlay">
   <div class="definition-box">
     <button class="close-btn" id="closeOverlay">&times;</button>
@@ -224,7 +228,7 @@
        al producto de sus cargas e inversamente proporcional al cuadrado de la distancia que las separa.</p>
     <ul>
       <li><strong>F</strong> = Fuerza eléctrica (N)</li>
-      <li><strong>k</strong> = Constante de Coulomb (9 × 10⁹ N·m²/C²)</li>
+      <li><strong>k</strong> = 9 × 10⁹ N·m²/C²</li>
       <li><strong>q₁</strong>, <strong>q₂</strong> = Cargas eléctricas (C)</li>
       <li><strong>r</strong> = Distancia entre las cargas (m)</li>
     </ul>
@@ -232,36 +236,30 @@
 </div>
 
 <script>
-  const form = document.getElementById("formCoulomb");
-  const res = document.getElementById("resultado");
-
-  form.addEventListener("submit", e => {
+  // 🧮 Calcular fuerza eléctrica
+  document.getElementById("formCoulomb").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    // ✅ Obtener valores correctamente
-    const q1Val = parseFloat(document.getElementById("q1").value);
-    const q2Val = parseFloat(document.getElementById("q2").value);
-    const rVal  = parseFloat(document.getElementById("r").value);
+    const q1Val = parseFloat(document.getElementById("input_q1").value);
+    const q2Val = parseFloat(document.getElementById("input_q2").value);
+    const rVal  = parseFloat(document.getElementById("input_r").value);
+    const resultado = document.getElementById("resultado");
 
     if (isNaN(q1Val) || isNaN(q2Val) || isNaN(rVal) || rVal === 0) {
-      res.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
-      res.style.display = "block";
+      resultado.textContent = "⚠️ Ingresa valores válidos (r ≠ 0)";
+      resultado.style.display = "block";
       return;
     }
 
-    // ✅ Cálculo de la Fuerza eléctrica
-    const F = 8.99e9 * (q1Val * q2Val) / (rVal ** 2);
-    res.textContent = `Fuerza eléctrica = ${F.toLocaleString('es-CO', { maximumFractionDigits: 3 })} N`;
-    res.style.display = "block";
+    const F = 8.99e9 * (q1Val * q2Val) / Math.pow(rVal, 2);
+    resultado.textContent = `Fuerza eléctrica = ${F.toLocaleString('es-CO', { maximumFractionDigits: 3 })} N`;
+    resultado.style.display = "block";
   });
 
-  // ✅ Ventana modal
+  // 📘 Mostrar/ocultar definición
   const overlay = document.getElementById("overlay");
   document.getElementById("btnInfo").onclick = () => overlay.style.display = "flex";
   document.getElementById("closeOverlay").onclick = () => overlay.style.display = "none";
-  overlay.addEventListener("click", e => { 
-    if (e.target === overlay) overlay.style.display = "none"; 
-  });
+  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.style.display = "none"; });
 </script>
-
 {% endblock %}

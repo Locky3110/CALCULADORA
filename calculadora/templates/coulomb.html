@@ -3,16 +3,17 @@
 <style>
   body {
     background: linear-gradient(90deg, #eaffea, #b8f5b8);
+    overflow-x: hidden;
   }
 
   /* 🔹 Contenedor general */
   .form-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
-    min-height: calc(100vh - 140px);
-    padding: 20px 3vw 90px;
+    min-height: auto;
+    padding: 5vh 3vw 12vh;
     box-sizing: border-box;
   }
 
@@ -27,6 +28,7 @@
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
     padding: clamp(15px, 3vw, 25px);
     text-align: center;
+    margin: auto;
   }
 
   .form-box h2 {
@@ -147,28 +149,31 @@
     justify-content: center;
     align-items: center;
     z-index: 999;
-    padding: 15px;
+    overflow-y: auto;
+    padding: 20px;
   }
 
   .definition-box {
     background: #ebffe8;
     color: #004d00;
     border-radius: 12px;
-    padding: clamp(15px, 3vw, 25px);
-    width: clamp(260px, 85%, 450px);
+    padding: clamp(15px, 4vw, 25px);
+    width: clamp(280px, 90%, 450px);
     border: 4px double #004d00;
-    font-size: clamp(13px, 2vw, 16px);
+    font-size: clamp(13px, 3vw, 16px);
     line-height: 1.5;
     text-align: left;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
     position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
   }
 
   .close-btn {
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: clamp(16px, 3vw, 22px);
+    font-size: clamp(16px, 4vw, 22px);
     font-weight: bold;
     color: #004d00;
     background: none;
@@ -180,10 +185,31 @@
     color: #008000;
   }
 
+  /* 📱 Ajustes móviles */
   @media (max-width: 600px) {
-    .input-group { flex-direction: column; }
-    .input-group input { width: 100%; }
-    .btn-calc, .btn-info-custom { width: 100%; }
+    .form-container {
+      flex-direction: column;
+      align-items: center;
+      padding: 6vh 4vw 12vh;
+    }
+
+    .form-box {
+      width: 100%;
+      margin-top: 3vh;
+    }
+
+    .input-group {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .input-group input {
+      width: 100%;
+    }
+
+    .btn-calc, .btn-info-custom {
+      width: 100%;
+    }
   }
 </style>
 
@@ -192,10 +218,8 @@
     <h2>🔴 Ley de Coulomb</h2>
     <h3>F = k · (q₁ · q₂) / r²</h3>
 
-    <!-- 📘 Botón Ver Definición -->
     <button id="btnInfo" class="btn-info-custom">📘 Ver definición</button>
 
-    <!-- 📦 Inputs y botón Calcular -->
     <div class="inner-box">
       <form id="formCoulomb">
         <div class="input-group">
@@ -214,12 +238,11 @@
       </form>
     </div>
 
-    <!-- 💡 Resultado dentro del bloque verde oscuro -->
     <div id="resultado"></div>
   </div>
 </div>
 
-<!-- 📖 Ventana modal -->
+<!-- 📖 Modal Definición -->
 <div class="overlay" id="overlay">
   <div class="definition-box">
     <button class="close-btn" id="closeOverlay">&times;</button>
@@ -236,10 +259,9 @@
 </div>
 
 <script>
-  // 🧮 Calcular fuerza eléctrica
+  // 🧮 Cálculo
   document.getElementById("formCoulomb").addEventListener("submit", function(e) {
     e.preventDefault();
-
     const q1Val = parseFloat(document.getElementById("input_q1").value);
     const q2Val = parseFloat(document.getElementById("input_q2").value);
     const rVal  = parseFloat(document.getElementById("input_r").value);
@@ -256,7 +278,7 @@
     resultado.style.display = "block";
   });
 
-  // 📘 Mostrar/ocultar definición
+  // 📘 Modal
   const overlay = document.getElementById("overlay");
   document.getElementById("btnInfo").onclick = () => overlay.style.display = "flex";
   document.getElementById("closeOverlay").onclick = () => overlay.style.display = "none";
